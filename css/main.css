@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;500&display=swap");
 
 *,
 *::before,
@@ -8,8 +8,8 @@
   box-sizing: border-box;
 }
 html {
-  font-family: Raleway, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 300;
   font-size: 20px;
   line-height: 1.5;
@@ -24,60 +24,45 @@ body {
 *******************/
 
 header {
-  background-color: hsl(20, 40%, 40%);
+  background-color: hsl(221, 85%, 21%);
   color: hsl(20, 40%, 100%);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-height: 20vh;
+  font-size: 2rem;
+  padding: 1rem 0;
   align-items: center;
-  min-height: 15vh;
-  font-size: 1rem;
-  border-bottom: 0.5rem solid hsl(20, 10%, 30%);
 }
+
 header h1,
 header form {
   padding: 1rem;
 }
+
 header h1 {
-  text-shadow: 2px 2px 2px hsl(20, 10%, 30%);
+  text-shadow: 2px 2px 2px hsl(20, 72%, 57%);
 }
+
 header form {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-right: 1rem;
 }
+
 #search {
   font-size: 1rem;
   line-height: 1;
   padding: 0.25rem 1rem;
-  font-family: Raleway, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 300;
   min-width: 30ch;
-}
-#btnSearch .iconic {
-  height: 22px;
-  width: 22px;
-}
-#btnSearch .iconic * {
-  stroke: hsl(20, 10%, 60%);
-  fill: hsl(20, 10%, 30%);
-}
-#btnSearch.pulse {
-  animation-name: pulse;
-  animation-duration: 2s;
-  animation-timing-function: linear;
-  animation-delay: 0;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-fill-mode: backwards;
-}
-#btnSearch {
   border-radius: 0.5rem;
-  margin-left: -2.2rem;
-  border: none;
-  background-color: white;
+}
+
+svg {
+  width: 30rem;
+  max-width: 70%;
 }
 
 /*******************
@@ -85,7 +70,7 @@ header form {
 *******************/
 
 #instructions {
-  display: none;
+  display: block;
 }
 #actors {
   display: none;
@@ -93,42 +78,31 @@ header form {
 #media {
   display: none;
 }
+#btnBack {
+  display: none;
+}
+
 #instructions.active,
 #actors.active,
 #media.active {
   display: block;
 }
+
 #instructions h2,
 #actors h2,
 #media h2 {
   font-weight: 500;
   font-size: 3rem;
-  color: hsl(20, 10%, 30%);
   padding: 1rem;
+  text-align: center;
+  color: hsl(20, 10%, 30%);
 }
 
 .content p {
   padding: 0 1rem;
   margin: 1rem 0;
+  text-align: center;
   color: hsl(20, 10%, 50%);
-}
-
-/***********************
-  Effects
-***********************/
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.64;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
 }
 
 /************************
@@ -137,8 +111,14 @@ header form {
 @media all and (min-width: 800px) {
   header {
     font-size: 1.2rem;
-    flex-direction: row;
+    /* flex-direction: row; */
   }
+
+  svg {
+    width: 50rem;
+    max-width: 50%;
+  }
+
   #search {
     max-width: 30vw;
   }
@@ -153,14 +133,13 @@ header form {
   #instructions h2,
   #actors h2,
   #media h2 {
-    /* for the wider screens */
-    font-size: 12rem;
+    font-size: 8rem;
     color: hsla(20, 10%, 30%, 0.32);
     position: relative;
-    writing-mode: vertical-lr;
   }
 }
-@media all and (min-width: 1000px) {
+
+@media all and (min-width: 62rem) {
   header {
     font-size: 2rem;
   }
