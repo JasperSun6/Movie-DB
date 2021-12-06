@@ -73,11 +73,15 @@ const ACTORS = {
       let card = document.createElement("div");
       card.className = "card";
 
+      // click actor card to media page
       card.addEventListener("click", MEDIA.favMovie);
       card.setAttribute("id", actor.id);
 
+      // actor image
       let image = document.createElement("img");
-      image.className = "card-img-top";
+      image.className = "card-img";
+
+      // check if actor has a image or give a not found image
       if (actor.profile_path) {
         image.src = APP.imageURL + actor.profile_path;
       } else {
@@ -89,19 +93,20 @@ const ACTORS = {
       let cardBody = document.createElement("div");
       cardBody.className = "card-body";
 
-      // info contents
+      // actor name
       let actorName = document.createElement("h3");
       actorName.className = "card-title";
       actorName.textContent = `Name: ${actor.name}`;
 
+      // actor info
       let pop = document.createElement("p");
       pop.className = "card-text";
       pop.textContent = `Popularity: ${actor.popularity}`;
-
       let known = document.createElement("p");
       known.className = "card-text";
       known.textContent = `Known for: ${actor.known_for_department}`;
 
+      // append card
       cardBody.append(actorName, pop, known);
       card.append(image, cardBody);
       df.append(card);
@@ -127,20 +132,21 @@ const MEDIA = {
     actorPage.style.display = "none";
     mediaPage.style.display = "block";
 
+    // back button
     backButton.addEventListener("click", MEDIA.backActorPage);
     backButton.style.display = "block";
 
     let key = STORAGE.baseKey + SEARCH.input;
 
-    // if (key in localStorage) {
-    //   MEDIA.movies = localStorage.getItem(key);
-    // } else {
-    //   MEDIA.movies = SEARCH.fetchData();
-    // }
-
-    let movieData = JSON.parse(localStorage.getItem(key));
+    //  check if in the local storage or fetch from database
+    if (key in localStorage) {
+      MEDIA.movies = localStorage.getItem(key);
+    } else {
+      MEDIA.movies = SEARCH.fetchData();
+    }
 
     let df = document.createDocumentFragment();
+    let movieData = JSON.parse(localStorage.getItem(key));
 
     movieData.forEach((person) => {
       if (actorId == person.id) {
@@ -167,26 +173,28 @@ const MEDIA = {
             movieName.textContent = `Name: ${actor.name}`;
           }
 
-          // card text
+          // movie info
           let voteAvg = document.createElement("p");
           voteAvg.className = "card-text";
           voteAvg.textContent = `Vote average: ${actor.vote_average}`;
-
           let voteCount = document.createElement("p");
           voteCount.className = "card-text";
           voteCount.textContent = `Vote count: ${actor.vote_count}`;
 
+          // append cards
           cardBody.append(movieName, voteAvg, voteCount);
           card.append(image, cardBody);
           df.append(card);
         });
 
+        // refresh page
         let movie = document.getElementById("movies");
         movie.textContent = "";
         movie.append(df);
       }
     });
   },
+  // back to actor page
   backActorPage: (ev) => {
     ev.preventDefault();
     let actorPage = document.getElementById("actors");
