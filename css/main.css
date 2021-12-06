@@ -47,6 +47,7 @@ header h1 {
 header form {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 #search {
@@ -105,13 +106,23 @@ svg {
   color: hsl(20, 10%, 50%);
 }
 
+.card {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.card-title,
+.card-text {
+  text-align: center;
+}
+
 /************************
   Media Queries
 ************************/
-@media all and (min-width: 800px) {
+@media all and (min-width: 37.5rem) {
   header {
     font-size: 1.2rem;
-    /* flex-direction: row; */
   }
 
   svg {
@@ -126,8 +137,8 @@ svg {
   #media.active {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
   }
 
   #instructions h2,
@@ -139,7 +150,7 @@ svg {
   }
 }
 
-@media all and (min-width: 62rem) {
+@media all and (min-width: 60rem) {
   header {
     font-size: 2rem;
   }
