@@ -38,7 +38,7 @@ const SEARCH = {
     fetch(url)
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not OK");
+          throw new Error("Network response was not OK, Please try again.");
         } else {
           return response.json();
         }
@@ -83,7 +83,7 @@ const ACTORS = {
 
     actors.forEach((actor) => {
       let card = document.createElement("div");
-      card.className = "card";
+      card.className = "card ";
 
       // click actor card to media page
       card.addEventListener("click", MEDIA.favMovie);
@@ -161,16 +161,19 @@ const ACTORS = {
     ACTORS.sortedActors = sort;
     ACTORS.getActor(ACTORS.sortedActors);
   },
+
   sortPopularity: (ev) => {
     let pop = document.getElementById("sortPop");
     pop.classList.toggle("activePop");
     let key = STORAGE.baseKey + SEARCH.input;
     let storage = JSON.parse(localStorage.getItem(key));
     let sortedPop = [...storage];
+
     let sortPop = sortedPop.sort((a, b) => {
-      let popUp = a.pop;
-      let popDown = b.pop;
+      let popUp = a.popularity;
+      let popDown = b.popularity;
       if (pop.classList.contains("activePop")) {
+        console.log("if active");
         if (popUp < popDown) {
           return -1;
         }
@@ -179,6 +182,7 @@ const ACTORS = {
         }
         return 0;
       } else {
+        console.log("else active");
         if (popUp < popDown) {
           return 1;
         }
@@ -303,17 +307,17 @@ const STORAGE = {
 const NAV = {
   homePage: () => {
     location.hash = `#`;
-    document.title = "Home";
+    document.title = "TMDB | Home";
   },
   actorPage: () => {
     let input = document.getElementById("search").value;
     location.hash = `${input}`;
-    document.title = "SPA Actors";
+    document.title = "TMDB | Actors";
   },
   mediaPage: (id) => {
     let input = document.getElementById("search").value;
     location.hash = `${input}/${id}`;
-    document.title = "SPA Media";
+    document.title = "TMDB | Media";
   },
 
   //this will be used in Assign 4
