@@ -9,6 +9,8 @@ const APP = {
     //this function runs when the page loads
     let search = document.getElementById("btnSearch");
     search.addEventListener("click", SEARCH.searchFunction);
+    search.addEventListener("click", NAV.actorPage);
+    NAV.homePage();
   },
 };
 
@@ -28,7 +30,10 @@ const SEARCH = {
       SEARCH.fetchData();
     }
   },
+
   fetchData() {
+    let loader = document.querySelector(".loader");
+    loader.classList.add("active");
     let url = `${APP.baseURL}search/person?api_key=${APP.KEY}&query=${SEARCH.input}`;
     fetch(url)
       .then((response) => {
@@ -39,11 +44,11 @@ const SEARCH = {
         }
       })
       .then((data) => {
+        loader.classList.remove("active");
         SEARCH.results = data.results;
         STORAGE.localStorage(SEARCH.input, data.results);
         ACTORS.getActor(data.results);
       })
-
       .catch((error) => {
         alert(`Error: ${error.name} ${error.message}`);
       });
@@ -53,6 +58,8 @@ const SEARCH = {
 //actors is for changes connected to content in the actors section
 const ACTORS = {
   actors: [],
+  sortedActors: [],
+  sortedPop: [],
   getActor: (actors) => {
     let instructionSection = document.getElementById("instructions");
     let actorSection = document.getElementById("actors");
@@ -66,6 +73,11 @@ const ACTORS = {
 
     let removeData = document.getElementById("actorContent");
     removeData.textContent = "";
+
+    let sort = document.getElementById("sortName");
+    let sortPop = document.getElementById("sortPop");
+    sort.addEventListener("click", ACTORS.sortName);
+    sortPop.addEventListener("click", ACTORS.sortPopularity);
 
     let df = document.createDocumentFragment();
 
@@ -96,7 +108,7 @@ const ACTORS = {
       // actor name
       let actorName = document.createElement("h3");
       actorName.className = "card-title";
-      actorName.textContent = `Name: ${actor.name}`;
+      actorName.textContent = `${actor.name}`;
 
       // actor info
       let pop = document.createElement("p");
@@ -114,6 +126,70 @@ const ACTORS = {
 
     let actorDiv = document.getElementById("actorContent");
     actorDiv.append(df);
+  },
+
+  sortName: (ev) => {
+    let name = document.getElementById("sortName");
+    name.classList.toggle("activeName");
+    let key = STORAGE.baseKey + SEARCH.input;
+    let storage = JSON.parse(localStorage.getItem(key));
+    let sortedName = [...storage];
+
+    let sort = sortedName.sort((a, b) => {
+      let actorA = a.name;
+      let actorB = b.name;
+      if (name.classList.contains("activeName")) {
+        //console.log("sorted a-z");
+        if (actorA < actorB) {
+          return -1;
+        }
+        if (actorA > actorB) {
+          return 1;
+        }
+        return 0;
+      } else {
+        // console.log("sorted z-a");
+        if (actorA < actorB) {
+          return 1;
+        }
+        if (actorA > actorB) {
+          return -1;
+        }
+        return 0;
+      }
+    });
+    ACTORS.sortedActors = sort;
+    ACTORS.getActor(ACTORS.sortedActors);
+  },
+  sortPopularity: (ev) => {
+    let pop = document.getElementById("sortPop");
+    pop.classList.toggle("activePop");
+    let key = STORAGE.baseKey + SEARCH.input;
+    let storage = JSON.parse(localStorage.getItem(key));
+    let sortedPop = [...storage];
+    let sortPop = sortedPop.sort((a, b) => {
+      let popUp = a.pop;
+      let popDown = b.pop;
+      if (pop.classList.contains("activePop")) {
+        if (popUp < popDown) {
+          return -1;
+        }
+        if (popUp > popDown) {
+          return 1;
+        }
+        return 0;
+      } else {
+        if (popUp < popDown) {
+          return 1;
+        }
+        if (popUp > popDown) {
+          return -1;
+        }
+        return 0;
+      }
+    });
+    ACTORS.sortedPop = sortPop;
+    ACTORS.getActor(ACTORS.sortedPop);
   },
 };
 
@@ -153,7 +229,7 @@ const MEDIA = {
         person.known_for.forEach((actor) => {
           let card = document.createElement("div");
           card.className = "card";
-          console.log(actor);
+
           let image = document.createElement("img");
           image.className = "card-img-top";
           image.src = APP.imageURL + actor.poster_path;
@@ -168,9 +244,9 @@ const MEDIA = {
 
           // check whether is a movie or is a tv shows
           if (actor.media_type === "movie") {
-            movieName.textContent = `Name: ${actor.original_title}`;
+            movieName.textContent = `${actor.original_title}`;
           } else {
-            movieName.textContent = `Name: ${actor.name}`;
+            movieName.textContent = `${actor.name}`;
           }
 
           // movie info
@@ -193,6 +269,7 @@ const MEDIA = {
         movie.append(df);
       }
     });
+    NAV.mediaPage(actorId);
   },
   // back to actor page
   backActorPage: (ev) => {
@@ -204,13 +281,15 @@ const MEDIA = {
     actorPage.style.display = "block";
     mediaPage.style.display = "none";
     backButton.style.display = "none";
+
+    NAV.actorPage();
   },
 };
 
 //storage is for working with localstorage
 const STORAGE = {
   keys: [],
-  baseKey: "search=",
+  baseKey: "searchActorName=",
 
   localStorage: (input, result) => {
     let key = STORAGE.baseKey + input;
@@ -222,8 +301,23 @@ const STORAGE = {
 
 //nav is for anything connected to the history api and location
 const NAV = {
+  homePage: () => {
+    location.hash = `#`;
+    document.title = "Home";
+  },
+  actorPage: () => {
+    let input = document.getElementById("search").value;
+    location.hash = `${input}`;
+    document.title = "SPA Actors";
+  },
+  mediaPage: (id) => {
+    let input = document.getElementById("search").value;
+    location.hash = `${input}/${id}`;
+    document.title = "SPA Media";
+  },
+
   //this will be used in Assign 4
 };
 
 //Start everything running
-document.addEventListener("DOMContentLoaded", APP.init);
+document.addEventListener("DOMContentLoaded", APP.init());

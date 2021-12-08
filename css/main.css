@@ -16,7 +16,7 @@ html {
 }
 body {
   min-height: 100vh;
-  background-color: hsl(20, 30%, 90%);
+  background-color: #a4b9d3;
 }
 
 /*******************
@@ -24,7 +24,7 @@ body {
 *******************/
 
 header {
-  background-color: hsl(221, 85%, 21%);
+  background-color: hsl(221, 37%, 38%);
   color: hsl(20, 40%, 100%);
   display: flex;
   flex-direction: column;
@@ -101,29 +101,89 @@ svg {
 #instructions h2,
 #actors h2,
 #media h2 {
-  font-weight: 500;
-  font-size: 3rem;
-  padding: 1rem;
+  font-weight: 400;
   text-align: center;
-  color: hsl(20, 10%, 30%);
+  color: #142d33;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* sort hover */
+.sort {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+.sort p {
+  margin: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: 0.5s;
+}
+.sort p:hover {
+  color: #3086a0;
 }
 
 .content p {
   padding: 0 1rem;
   margin: 1rem 0;
   text-align: center;
-  color: hsl(20, 10%, 50%);
+  font-size: 1.2rem;
+  color: #152f37;
 }
 
 .card {
   padding: 0;
   margin-bottom: 1rem;
   cursor: pointer;
+  transition: 0.8s;
+  color: #49575c;
 }
 
 .card-title,
 .card-text {
   text-align: center;
+}
+
+/* card hover */
+.card:hover {
+  color: #7dbccb;
+}
+
+/* card image hover */
+.card img {
+  transition: 1s;
+}
+.card:hover img {
+  opacity: 0.8;
+}
+
+/* loader */
+.loader.active {
+  margin: auto;
+  width: 6rem;
+  height: 6rem;
+  border: 1rem solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 1rem solid #3498db;
+  border-bottom: 1rem solid #3498db;
+  border-left: 1rem solid #43a6c4;
+  border-right: 1rem solid #43a6c4;
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /************************
@@ -142,6 +202,7 @@ svg {
   #search {
     max-width: 30vw;
   }
+
   #actors.active,
   #media.active {
     display: flex;
@@ -153,9 +214,7 @@ svg {
   #instructions h2,
   #actors h2,
   #media h2 {
-    font-size: 8rem;
-    color: hsla(20, 10%, 30%, 0.32);
-    position: relative;
+    font-size: 3rem;
   }
 }
 
@@ -163,11 +222,15 @@ svg {
   header {
     font-size: 2rem;
   }
-  #search {
-    font-size: 1.5rem;
+
+  svg {
+    width: 60rem;
+    max-width: 60%;
   }
-  #btnSearch .iconic {
-    height: 42px;
-    width: 42px;
+
+  #instructions h2,
+  #actors h2,
+  #media h2 {
+    font-size: 3rem;
   }
 }

@@ -38,19 +38,19 @@
         </g>
       </g>
     </svg>
-    <section class="container-sm">
+    <section class="container">
       <h1>Actors &amp; Shows</h1>
       <form>
         <input class="form-control me-2" type="search" id="search" value="" placeholder="Actor Name" />
         <div class="form-button">
-          <button class="btn btn-outline-primary" id="btnSearch">Search</button>
-          <button class="btn btn-outline-primary" id="btnBack">Back</button>
+          <button class="btn btn-info" id="btnSearch">Search</button>
+          <button class="btn btn-info" id="btnBack">Back</button>
         </div>
       </form>
     </section>
   </header>
   <main>
-    <section id="instructions" class="container-xs">
+    <section id="instructions" class="container">
       <h2>How to Start</h2>
       <div class="content">
         <p>
@@ -65,10 +65,22 @@
           Clicking on an actors name or image will load a list of movies and
           shows in which they have appeared.
         </p>
+        <p>
+          Use "Sort Name" or "Sort Popularity" to sort the actors' name or their popularity.
+        </p>
+        <p>Please wait for the loader loading, and your result will be shown shortly.</p>
       </div>
     </section>
+
     <section id="actors" class="container">
-      <h2>Actors</h2>
+      <div class="loader container"></div>
+      <div class="header">
+        <h2>Actors</h2>
+        <div class="sort">
+          <p id="sortName">Sort Name</p>
+          <p id="sortPop">Sort Popularity</p>
+        </div>
+      </div>
       <div id="actorContent" class="content row row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
         <p>Content grid will go here</p>
         <p>Content grid will go here</p>
@@ -77,6 +89,7 @@
       </div>
     </section>
     <section id="media" class="container">
+      <div class="loader"></div>
       <h2>Media</h2>
       <div id="movies" class="content row  row-cols-sm-1 row-cols-md-3"></div>
     </section>
