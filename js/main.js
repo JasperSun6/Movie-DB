@@ -29,6 +29,7 @@ const SEARCH = {
 
   searchFunction: (input) => {
     let key = STORAGE.baseKey + input;
+    // check if it is a valid input
     if (!input) {
       alert("Empty input, please try it again.");
     } else {
@@ -76,6 +77,7 @@ const ACTORS = {
     let mediaSection = document.getElementById("media");
     let backBtn = document.getElementById("btnBack");
 
+    // show actor page
     instructionSection.style.display = "none";
     mediaSection.style.display = "none";
     actorSection.style.display = "block";
@@ -103,7 +105,7 @@ const ACTORS = {
       let image = document.createElement("img");
       image.className = "card-img";
 
-      // check if actor has a image or give a not found image
+      // check if actor has a image, if not, give a not found image
       if (actor.profile_path) {
         image.src = APP.imageURL + actor.profile_path;
       } else {
@@ -138,7 +140,7 @@ const ACTORS = {
     actorDiv.append(df);
   },
 
-  sortName: (ev) => {
+  sortName: () => {
     let name = document.getElementById("sortName");
     name.classList.toggle("activeName");
     let key = STORAGE.baseKey + SEARCH.input;
@@ -183,7 +185,6 @@ const ACTORS = {
       let popUp = a.popularity;
       let popDown = b.popularity;
       if (pop.classList.contains("activePop")) {
-        console.log("if active");
         if (popUp < popDown) {
           return -1;
         }
@@ -192,7 +193,6 @@ const ACTORS = {
         }
         return 0;
       } else {
-        console.log("else active");
         if (popUp < popDown) {
           return 1;
         }
@@ -223,10 +223,11 @@ const MEDIA = {
     let mediaPage = document.getElementById("media");
     let backButton = document.getElementById("btnBack");
 
+    // Show media page
     actorPage.style.display = "none";
     mediaPage.style.display = "block";
 
-    // back button
+    // show back button
     backButton.addEventListener("click", MEDIA.backActorPage);
     backButton.style.display = "block";
 
@@ -306,7 +307,6 @@ const STORAGE = {
     STORAGE.keys.push(key);
     localStorage.setItem(key, JSON.stringify(result));
   },
-  //this will be used in Assign 4
 };
 
 //nav is for anything connected to the history api and location
@@ -322,6 +322,7 @@ const NAV = {
       actorPage.style.display = "none";
       mediaPage.style.display = "none";
     } else {
+      // regular expression check if the input has digit (actor ID) then split the url.
       if (/\d/.test(input)) {
         let actor = input.split("/")[1];
         MEDIA.favMovie(actor);
@@ -331,7 +332,6 @@ const NAV = {
       }
     }
   },
-  //this will be used in Assign 4
 };
 
 //Start everything running
