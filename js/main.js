@@ -7,10 +7,10 @@ const APP = {
 
   init: () => {
     //this function runs when the page loads
+    history.replaceState({}, "", "#");
+    window.addEventListener("popstate", NAV.nav);
     let search = document.getElementById("btnSearch");
-    search.addEventListener("click", SEARCH.searchFunction);
-    search.addEventListener("click", NAV.actorPage);
-    NAV.homePage();
+    search.addEventListener("click", SEARCH.getInput);
   },
 };
 
@@ -19,15 +19,25 @@ const SEARCH = {
   results: [],
   input: "",
 
-  searchFunction: (ev) => {
+  getInput: (ev) => {
     ev.preventDefault();
     SEARCH.input = document.getElementById("search").value;
-    let key = STORAGE.baseKey + SEARCH.input;
-    if (key in localStorage) {
-      ACTORS.actors = localStorage.getItem(key);
-      ACTORS.getActor(JSON.parse(ACTORS.actors));
+    history.pushState({}, "", `#${SEARCH.input}`);
+    let input = location.hash;
+    SEARCH.searchFunction(input);
+  },
+
+  searchFunction: (input) => {
+    let key = STORAGE.baseKey + input;
+    if (!input) {
+      alert("Empty input, please try it again.");
     } else {
-      SEARCH.fetchData();
+      if (key in localStorage) {
+        ACTORS.actors = localStorage.getItem(key);
+        ACTORS.getActor(JSON.parse(ACTORS.actors));
+      } else {
+        SEARCH.fetchData();
+      }
     }
   },
 
@@ -38,7 +48,7 @@ const SEARCH = {
     fetch(url)
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not OK, Please try again.");
+          throw new Error("API response was not ok, Please try again.");
         } else {
           return response.json();
         }
@@ -74,9 +84,9 @@ const ACTORS = {
     let removeData = document.getElementById("actorContent");
     removeData.textContent = "";
 
-    let sort = document.getElementById("sortName");
+    let sortName = document.getElementById("sortName");
     let sortPop = document.getElementById("sortPop");
-    sort.addEventListener("click", ACTORS.sortName);
+    sortName.addEventListener("click", ACTORS.sortName);
     sortPop.addEventListener("click", ACTORS.sortPopularity);
 
     let df = document.createDocumentFragment();
@@ -86,7 +96,7 @@ const ACTORS = {
       card.className = "card ";
 
       // click actor card to media page
-      card.addEventListener("click", MEDIA.favMovie);
+      card.addEventListener("click", MEDIA.history);
       card.setAttribute("id", actor.id);
 
       // actor image
@@ -135,7 +145,7 @@ const ACTORS = {
     let storage = JSON.parse(localStorage.getItem(key));
     let sortedName = [...storage];
 
-    let sort = sortedName.sort((a, b) => {
+    let sortName = sortedName.sort((a, b) => {
       let actorA = a.name;
       let actorB = b.name;
       if (name.classList.contains("activeName")) {
@@ -158,7 +168,7 @@ const ACTORS = {
         return 0;
       }
     });
-    ACTORS.sortedActors = sort;
+    ACTORS.sortedActors = sortName;
     ACTORS.getActor(ACTORS.sortedActors);
   },
 
@@ -201,10 +211,14 @@ const ACTORS = {
 const MEDIA = {
   movies: [],
 
-  favMovie: (ev) => {
+  history: (ev) => {
     let getId = ev.target.closest(".card");
     let actorId = getId.getAttribute("id");
+    history.pushState({}, "", `${location.hash}/${actorId}`);
+    MEDIA.favMovie(actorId);
+  },
 
+  favMovie: (actorId) => {
     let actorPage = document.getElementById("actors");
     let mediaPage = document.getElementById("media");
     let backButton = document.getElementById("btnBack");
@@ -234,6 +248,7 @@ const MEDIA = {
           let card = document.createElement("div");
           card.className = "card";
 
+          // movie poster
           let image = document.createElement("img");
           image.className = "card-img-top";
           image.src = APP.imageURL + actor.poster_path;
@@ -273,20 +288,11 @@ const MEDIA = {
         movie.append(df);
       }
     });
-    NAV.mediaPage(actorId);
   },
   // back to actor page
   backActorPage: (ev) => {
     ev.preventDefault();
-    let actorPage = document.getElementById("actors");
-    let mediaPage = document.getElementById("media");
-    let backButton = document.getElementById("btnBack");
-
-    actorPage.style.display = "block";
-    mediaPage.style.display = "none";
-    backButton.style.display = "none";
-
-    NAV.actorPage();
+    window.history.back();
   },
 };
 
@@ -305,21 +311,26 @@ const STORAGE = {
 
 //nav is for anything connected to the history api and location
 const NAV = {
-  homePage: () => {
-    location.hash = `#`;
-    document.title = "TMDB | Home";
-  },
-  actorPage: () => {
-    let input = document.getElementById("search").value;
-    location.hash = `${input}`;
-    document.title = "TMDB | Actors";
-  },
-  mediaPage: (id) => {
-    let input = document.getElementById("search").value;
-    location.hash = `${input}/${id}`;
-    document.title = "TMDB | Media";
-  },
+  nav: () => {
+    let input = location.hash.replace("#", "");
 
+    if (!input) {
+      let homePage = document.getElementById("instructions");
+      let actorPage = document.getElementById("actors");
+      let mediaPage = document.getElementById("media");
+      homePage.style.display = "block";
+      actorPage.style.display = "none";
+      mediaPage.style.display = "none";
+    } else {
+      if (/\d/.test(input)) {
+        let actor = input.split("/")[1];
+        MEDIA.favMovie(actor);
+      } else {
+        SEARCH.input = input;
+        SEARCH.searchFunction(input);
+      }
+    }
+  },
   //this will be used in Assign 4
 };
 

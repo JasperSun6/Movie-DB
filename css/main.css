@@ -141,8 +141,19 @@ svg {
   padding: 0;
   margin-bottom: 1rem;
   cursor: pointer;
-  transition: 0.8s;
   color: #49575c;
+  animation: 1s ease slideUp;
+  transition: 0.8s;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateX(70rem);
+  }
+
+  to {
+    transform: translateX(0rem);
+  }
 }
 
 .card-title,
