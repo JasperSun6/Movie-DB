@@ -140,7 +140,7 @@ const ACTORS = {
     actorDiv.append(df);
   },
 
-  sortName: () => {
+  sortName: (ev) => {
     let name = document.getElementById("sortName");
     name.classList.toggle("activeName");
     let key = STORAGE.baseKey + SEARCH.input;
@@ -322,9 +322,10 @@ const NAV = {
       actorPage.style.display = "none";
       mediaPage.style.display = "none";
     } else {
-      // regular expression check if the input has digit (actor ID) then split the url.
       if (/\d/.test(input)) {
+        // regular expression check if the input has digit (actor ID) then split the url.
         let actor = input.split("/")[1];
+        SEARCH.input = input.split("/")[0];
         MEDIA.favMovie(actor);
       } else {
         SEARCH.input = input;
